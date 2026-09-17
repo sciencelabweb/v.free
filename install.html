@@ -416,13 +416,14 @@
   </div>
 </div>
 
-<!-- PWA Install Script -->
-<script>
-  // Sidebar Toggle
+<script type="module">
+  import { db } from './firebase-config.js';
+  import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  // Sidebar Toggle (Existing)
   const sidebar = document.getElementById('sidebar');
   const overlay = document.getElementById('overlay');
   const toggleBtn = document.getElementById('toggleBtn');
-
   toggleBtn.addEventListener('click', () => {
     if (window.innerWidth <= 992) {
       sidebar.classList.toggle('mobile-open');
@@ -443,7 +444,21 @@
   const installBtnText = document.getElementById('installBtnText');
   const installStatus = document.getElementById('installStatus');
 
-  // Listen for the beforeinstallprompt event
+  // Function to track download in Firestore
+  const trackDownload = async (platform) => {
+    try {
+      await addDoc(collection(db, 'downloads'), {
+        date: new Date().toISOString().split('T')[0], // YYYY-MM-DD
+        timestamp: serverTimestamp(),
+        platform: platform || 'Unknown',
+        userAgent: navigator.userAgent
+      });
+      console.log('Download tracked successfully');
+    } catch (e) {
+      console.error('Error tracking download:', e);
+    }
+  };
+
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e;
@@ -453,7 +468,6 @@
     installStatus.innerHTML = '<i class="fa-solid fa-circle-check"></i> Ready to install! Tap the button above.';
   });
 
-  // Handle install button click
   installBtn.addEventListener('click', async () => {
     if (!deferredPrompt) {
       installStatus.className = 'install-status info';
@@ -467,6 +481,12 @@
       installStatus.innerHTML = '<i class="fa-solid fa-circle-check"></i> Installation started! Check your home screen.';
       installBtn.disabled = true;
       installBtnText.textContent = 'Installed Successfully';
+      
+      // TRACK DOWNLOAD
+      let platform = 'Desktop';
+      if (navigator.userAgent.includes('Android')) platform = 'Android';
+      else if (navigator.userAgent.includes('iPhone') || navigator.userAgent.includes('iPad')) platform = 'iOS';
+      trackDownload(platform);
     } else {
       installStatus.className = 'install-status info';
       installStatus.innerHTML = '<i class="fa-solid fa-circle-info"></i> Installation cancelled. You can try again anytime.';
@@ -474,40 +494,36 @@
     deferredPrompt = null;
   });
 
-  // Detect if already installed
   window.addEventListener('appinstalled', () => {
     installStatus.className = 'install-status success';
     installStatus.innerHTML = '<i class="fa-solid fa-circle-check"></i> ScienceLab is now installed on your device!';
     installBtn.disabled = true;
     installBtnText.textContent = 'Already Installed';
     deferredPrompt = null;
+    
+    // TRACK DOWNLOAD (Fallback for browser UI installs)
+    let platform = 'Desktop';
+    if (navigator.userAgent.includes('Android')) platform = 'Android';
+    else if (navigator.userAgent.includes('iPhone') || navigator.userAgent.includes('iPad')) platform = 'iOS';
+    trackDownload(platform);
   });
 
-  // Check if already in standalone mode
-  if (window.matchMedia('(display-mode: standalone)').matches) {
-    installBtn.disabled = true;
-    installBtnText.textContent = 'Already Running as App';
-    installStatus.className = 'install-status success';
-    installStatus.innerHTML = '<i class="fa-solid fa-circle-check"></i> You are already using the installed app!';
-  } else if (navigator.standalone) {
-    // iOS standalone detection
+  if (window.matchMedia('(display-mode: standalone)').matches || navigator.standalone) {
     installBtn.disabled = true;
     installBtnText.textContent = 'Already Running as App';
     installStatus.className = 'install-status success';
     installStatus.innerHTML = '<i class="fa-solid fa-circle-check"></i> You are already using the installed app!';
   } else {
-    // Fallback message after short delay
     setTimeout(() => {
       if (!deferredPrompt) {
         installBtn.disabled = true;
         installBtnText.textContent = 'Install Not Available';
         installStatus.className = 'install-status info';
-        installStatus.innerHTML = '<i class="fa-solid fa-circle-info"></i> Auto-install not supported in this browser. Please use the manual guide below.';
+        installStatus.innerHTML = '<i class="fa-solid fa-circle-info"></i> Auto-install not supported. Use the manual guide below.';
       }
     }, 1500);
   }
 
-  // Register Service Worker
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('./sw.js')
