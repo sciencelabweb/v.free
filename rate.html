@@ -4,33 +4,37 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Rate ScienceLab | Student Feedback & Reviews</title>
+<meta name="description" content="Rate your experience with ScienceLab physics simulators. Read reviews from other students and help us improve.">
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  /* Premium Rate Page Styles */
-  .rate-hero {
-    text-align: center;
+  /* Custom Styles for Rate Page */
+  .hero-rate-card {
     background: linear-gradient(135deg, var(--teal-subtle) 0%, #ffffff 100%);
     border: 2px dashed var(--teal-light);
-    padding: 40px 28px;
-  }
-  .rate-hero-img {
-    width: 100%;
-    max-width: 280px;
+    border-radius: var(--radius);
+    padding: 48px 24px;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
     margin-bottom: 24px;
-    border-radius: 20px;
-    border: 4px solid #fff;
-    box-shadow: var(--shadow-md);
   }
-  .rate-hero h2 {
-    color: var(--primary);
+  .hero-rate-img {
+    max-width: 240px;
+    width: 100%;
+    border-radius: 24px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-md);
+    border: 4px solid #ffffff;
+  }
+  .hero-rate-title {
     font-size: 1.8rem;
+    color: var(--primary);
     font-weight: 800;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     letter-spacing: -0.5px;
   }
-  .rate-hero p {
+  .hero-rate-desc {
     color: var(--text-muted);
     max-width: 560px;
     margin: 0 auto;
@@ -39,65 +43,72 @@
   }
 
   .form-card {
-    background: #fff;
+    background: #ffffff;
     border: 2px solid var(--border-color);
-  }
-  
-  .star-rating {
-    display: flex;
-    gap: 12px;
-    font-size: 2.4rem;
-    color: #e2e8f0;
-    cursor: pointer;
-    margin: 12px 0 8px;
-  }
-  .star-rating .star {
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .star-rating .star:hover,
-  .star-rating .star.active {
-    color: #D98E18;
-    transform: scale(1.15);
-    text-shadow: 0 4px 12px rgba(217, 142, 24, 0.3);
+    border-radius: var(--radius);
+    padding: 28px;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 40px;
   }
 
-  .reviews-section {
-    margin-top: 40px;
+  #starContainer span {
+    transition: transform 0.2s ease, color 0.2s ease;
+    user-select: none;
   }
-  .reviews-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 18px;
+  #starContainer span:hover {
+    transform: scale(1.15);
   }
-  @media (min-width: 768px) {
-    .reviews-grid { grid-template-columns: repeat(2, 1fr); }
+
+  .reviews-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--teal-subtle);
   }
-  
+  .reviews-header i {
+    color: var(--teal-dark);
+    background: var(--teal-subtle);
+    padding: 10px;
+    border-radius: 12px;
+    font-size: 1.1rem;
+  }
+  .reviews-header h3 {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--primary);
+    letter-spacing: -0.3px;
+  }
+
   .review-card {
-    background: #fff;
-    border: 1.5px solid var(--border-color);
+    background: #ffffff;
+    border: 2px solid var(--border-color);
     border-radius: 16px;
     padding: 20px;
     transition: all 0.3s ease;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
     box-shadow: var(--shadow-sm);
+    margin-bottom: 16px;
   }
   .review-card:hover {
     border-color: var(--teal-light);
-    transform: translateY(-4px);
+    transform: translateY(-3px);
     box-shadow: var(--shadow-md);
   }
-  
-  .review-header {
+  .reviewer-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 14px;
+  }
+  .reviewer-profile {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 12px;
   }
-  .review-avatar {
-    width: 44px;
-    height: 44px;
+  .reviewer-avatar {
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
     background: var(--teal-subtle);
     color: var(--teal-dark);
@@ -105,72 +116,69 @@
     align-items: center;
     justify-content: center;
     font-weight: 800;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     border: 2px solid var(--teal-light);
     flex-shrink: 0;
   }
-  .review-meta { flex: 1; }
-  .review-name {
+  .reviewer-meta h4 {
+    font-size: 0.95rem;
     font-weight: 700;
     color: var(--primary);
-    font-size: 1rem;
     margin-bottom: 2px;
   }
-  .review-date {
-    font-size: 0.75rem;
+  .reviewer-meta .date {
+    font-size: 0.78rem;
     color: var(--text-muted);
     font-weight: 500;
   }
   .review-stars {
     color: #D98E18;
     font-size: 0.95rem;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
     margin-top: 4px;
   }
-  .review-msg {
+  .review-body {
     color: var(--text-main);
-    font-size: 0.92rem;
     line-height: 1.6;
+    font-size: 0.95rem;
     background: var(--bg-card);
-    padding: 14px;
+    padding: 14px 16px;
     border-radius: 12px;
-    border: 1.5px dashed var(--teal-light);
+    border-left: 4px solid var(--teal-light);
   }
   
-  .empty-state {
-    grid-column: 1 / -1;
+  .feedbacks-empty {
     text-align: center;
-    padding: 50px 20px;
+    padding: 40px 20px;
+    color: var(--text-muted);
+    font-size: 0.95rem;
     background: var(--bg-card);
     border-radius: 16px;
     border: 2px dashed var(--teal-light);
-    color: var(--text-muted);
   }
-  .empty-state i {
+  .feedbacks-empty i {
     font-size: 2.5rem;
     color: var(--teal-light);
-    margin-bottom: 16px;
+    margin-bottom: 12px;
     display: block;
   }
-  
-  .success-toast {
-    display: none;
-    margin-top: 16px;
-    padding: 14px;
-    background: #dcfce7;
-    color: #166534;
-    border-radius: 12px;
+  .feedbacks-loading {
     text-align: center;
+    padding: 30px;
+    color: var(--text-muted);
     font-weight: 600;
-    border: 1.5px solid #86efac;
-    animation: fadeIn 0.4s ease;
+  }
+  
+  .input-error {
+    border-color: #dc2626 !important;
+    background-color: #fef2f2 !important;
   }
 </style>
 </head>
 <body>
 
 <div class="app-layout">
-  <!-- Sidebar (Matched with Index for consistency) -->
+  <!-- Sidebar -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <div class="logo-container">
@@ -218,28 +226,30 @@
     </header>
 
     <div class="content-body">
-      <div class="container">
+      <div class="container" style="max-width: 700px; margin: 0 auto;">
         
-        <!-- Hero Section -->
-        <div class="card rate-hero">
-          <img src="https://i.postimg.cc/0jDgYd2n/rate.gif" alt="Rate ScienceLab" class="rate-hero-img">
-          <h2>Share Your Experience</h2>
-          <p>Help us improve ScienceLab by sharing your thoughts. Your feedback directly influences our next simulator updates and helps fellow students!</p>
+        <!-- HERO SECTION -->
+        <div class="hero-rate-card">
+          <img src="https://i.postimg.cc/0jDgYd2n/rate.gif" alt="Rate ScienceLab" class="hero-rate-img">
+          <h2 class="hero-rate-title">How is your experience?</h2>
+          <p class="hero-rate-desc">Your feedback helps us build better physics simulators and improve the learning experience for students worldwide. Let us know what you think!</p>
         </div>
 
-        <!-- Feedback Form -->
-        <div class="card form-card" style="max-width: 650px; margin: 0 auto; width: 100%;">
-          <h3 class="card-title"><i class="fa-solid fa-pen-to-square"></i> Write a Review</h3>
+        <!-- FEEDBACK FORM -->
+        <div class="form-card">
+          <div class="card-title">
+            <i class="fa-solid fa-pen-to-square"></i> Share Your Thoughts
+          </div>
           
           <form id="feedbackForm">
             <div class="control-group">
-              <label for="userName">Your Name <span style="color:#dc2626;">*</span></label>
-              <input type="text" id="userName" name="name" required placeholder="e.g., Kamal Perera" style="width: 100%; padding: 12px 16px; border: 2px solid var(--border-color); border-radius: 12px; font-family: inherit; font-size: 1rem; outline: none; transition: all 0.3s ease;">
+              <label for="userName">Your Name <span style="color: #dc2626;">*</span></label>
+              <input type="text" id="userName" name="name" required placeholder="e.g., Kamal Perera" maxlength="50" style="width: 100%; padding: 12px 16px; border: 2px solid var(--border-color); border-radius: 12px; font-size: 1rem; background: var(--bg-card); outline: none; transition: all 0.3s;">
             </div>
 
             <div class="control-group">
-              <label>Your Rating <span style="color:#dc2626;">*</span></label>
-              <div class="star-rating" id="starContainer">
+              <label>Your Rating</label>
+              <div style="display: flex; gap: 8px; font-size: 2.2rem; color: #cbd5e1; cursor: pointer; margin-bottom: 8px;" id="starContainer">
                 <span data-value="1" class="star">★</span>
                 <span data-value="2" class="star">★</span>
                 <span data-value="3" class="star">★</span>
@@ -247,33 +257,33 @@
                 <span data-value="5" class="star">★</span>
               </div>
               <input type="hidden" id="ratingValue" name="rating" value="5">
-              <p style="font-size: 0.85rem; color: var(--teal-dark); font-weight: 600; margin-top: -4px;" id="ratingText">Selected: 5 Stars</p>
+              <p style="font-size: 0.85rem; color: var(--teal-dark); font-weight: 600;" id="ratingText">Selected: 5 Stars</p>
             </div>
 
             <div class="control-group">
               <label for="feedbackMessage">Your Feedback</label>
-              <textarea id="feedbackMessage" name="message" rows="4" placeholder="What did you like? What can we improve?" style="width: 100%; padding: 12px 16px; border: 2px solid var(--border-color); border-radius: 12px; font-family: inherit; font-size: 1rem; resize: vertical; outline: none; transition: all 0.3s ease;"></textarea>
+              <textarea id="feedbackMessage" name="message" rows="4" placeholder="e.g., The micrometer simulator is great, but please add more specimens..." style="width: 100%; padding: 12px 16px; border: 2px solid var(--border-color); border-radius: 12px; font-family: inherit; font-size: 1rem; resize: vertical; outline: none; background: var(--bg-card);"></textarea>
             </div>
 
             <button type="submit" class="btn" id="submitBtn" style="margin-top: 8px;">
-              <i class="fa-solid fa-paper-plane"></i> Submit Review
+              <i class="fa-solid fa-paper-plane"></i> Submit Feedback
             </button>
             
-            <div class="success-toast" id="successMessage">
+            <div id="successMessage" style="display: none; margin-top: 16px; padding: 14px; background: #dcfce7; color: #166534; border-radius: 12px; text-align: center; font-weight: 600; border: 1px solid #86efac;">
               <i class="fa-solid fa-check-circle"></i> Thank you! Your review has been recorded successfully.
             </div>
           </form>
         </div>
 
-        <!-- Public Reviews Section -->
-        <div class="reviews-section">
-          <h3 class="card-title" style="border: none; padding: 0; margin-bottom: 20px;">
-            <i class="fa-solid fa-comments"></i> Student Reviews
-          </h3>
-          <div id="publicFeedbacksList" class="reviews-grid">
-            <div class="empty-state" style="padding: 20px;">
-              <i class="fa-solid fa-spinner fa-spin" style="color: var(--teal-dark);"></i>
-              <p>Loading reviews...</p>
+        <!-- PUBLIC REVIEWS SECTION -->
+        <div class="feedbacks-section">
+          <div class="reviews-header">
+            <i class="fa-solid fa-comments"></i>
+            <h3>What Other Students Say</h3>
+          </div>
+          <div id="publicFeedbacksList" class="feedbacks-list">
+            <div class="feedbacks-loading">
+              <i class="fa-solid fa-spinner fa-spin"></i> Loading student reviews...
             </div>
           </div>
         </div>
@@ -286,15 +296,11 @@
         <a href="https://www.learny.study" class="footer-custom-link footer-learny" target="_blank">
           <i class="fa-solid fa-graduation-cap"></i> Learny App
         </a>
-        <span style="color: var(--text-muted);">|</span>
         <a href="https://t.me/sciencepicco" class="footer-custom-link footer-science" target="_blank">
           <i class="fa-brands fa-telegram"></i> Science Picco
         </a>
       </div>
-      <p>
-        Designed by 
-        <a href="https://hexasolutions.online" class="footer-link" target="_blank">Hexa Solutions</a>
-      </p>
+      <p>Designed by <a href="https://hexasolutions.online" class="footer-link" target="_blank">Hexa Solutions</a> © 2026</p>
     </footer>
   </div>
 </div>
@@ -343,49 +349,43 @@
   const ratingInput = document.getElementById('ratingValue');
   const ratingText = document.getElementById('ratingText');
 
-  function updateStars(value) {
+  const updateStars = (value) => {
     stars.forEach(s => {
-      s.classList.toggle('active', parseInt(s.getAttribute('data-value')) <= value);
+      s.style.color = parseInt(s.getAttribute('data-value')) <= value ? '#D98E18' : '#cbd5e1';
     });
-    ratingText.textContent = `Selected: ${value} Star${value > 1 ? 's' : ''}`;
-  }
+  };
 
   stars.forEach(star => {
     star.addEventListener('click', () => {
       const value = parseInt(star.getAttribute('data-value'));
       ratingInput.value = value;
+      ratingText.textContent = `Selected: ${value} Star${value > 1 ? 's' : ''}`;
       updateStars(value);
     });
-    
-    star.addEventListener('mouseenter', () => {
-      const value = parseInt(star.getAttribute('data-value'));
-      stars.forEach(s => {
-        s.classList.toggle('active', parseInt(s.getAttribute('data-value')) <= value);
-      });
-    });
   });
-
-  document.getElementById('starContainer').addEventListener('mouseleave', () => {
-    updateStars(parseInt(ratingInput.value));
-  });
-
-  updateStars(5); // Default to 5 stars
+  
+  // Initialize with 5 stars
+  updateStars(5);
 
   // ========== FORM SUBMISSION ==========
   const form = document.getElementById('feedbackForm');
   const submitBtn = document.getElementById('submitBtn');
   const successMsg = document.getElementById('successMessage');
+  const nameInput = document.getElementById('userName');
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const name = document.getElementById('userName').value.trim();
-    const rating = parseInt(ratingInput.value) || 5;
-    const message = document.getElementById('feedbackMessage').value.trim();
-
+    
+    const name = nameInput.value.trim();
     if (!name) {
-      alert('Please enter your name.');
+      nameInput.classList.add('input-error');
+      nameInput.focus();
       return;
     }
+    nameInput.classList.remove('input-error');
+
+    const rating = parseInt(ratingInput.value) || 5;
+    const message = document.getElementById('feedbackMessage').value.trim();
 
     submitBtn.disabled = true;
     submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Submitting...';
@@ -402,6 +402,7 @@
       successMsg.style.display = 'block';
       form.reset();
       ratingInput.value = 5;
+      ratingText.textContent = 'Selected: 5 Stars';
       updateStars(5);
       
       setTimeout(() => successMsg.style.display = 'none', 5000);
@@ -413,7 +414,7 @@
       alert("Failed to submit feedback. Please check your internet connection.");
     } finally {
       submitBtn.disabled = false;
-      submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Submit Review';
+      submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Submit Feedback';
     }
   });
 
@@ -426,7 +427,7 @@
       
       if (snap.empty) {
         container.innerHTML = `
-          <div class="empty-state">
+          <div class="feedbacks-empty">
             <i class="fa-regular fa-comment-dots"></i>
             <p>No reviews yet. Be the first to share your feedback!</p>
           </div>`;
@@ -437,8 +438,8 @@
       snap.docs.forEach(docSnap => {
         const f = docSnap.data();
         const rating = f.rating || 5;
-        const starsHtml = '★'.repeat(rating) + '<span style="color:#e2e8f0;">' + '☆'.repeat(5 - rating) + '</span>';
-        const name = f.name || 'Anonymous';
+        const starsHtml = '★'.repeat(rating) + '<span style="color:#cbd5e1;">' + '☆'.repeat(5 - rating) + '</span>';
+        const name = f.name || 'Anonymous Student';
         const initial = name.charAt(0).toUpperCase();
         
         // Format date nicely
@@ -461,22 +462,26 @@
         const card = document.createElement('div');
         card.className = 'review-card';
         card.innerHTML = `
-          <div class="review-header">
-            <div class="review-avatar">${initial}</div>
-            <div class="review-meta">
-              <div class="review-name">${escapeHtml(name)}</div>
-              <div class="review-date">${dateStr}</div>
+          <div class="reviewer-head">
+            <div class="reviewer-profile">
+              <div class="reviewer-avatar">${initial}</div>
+              <div class="reviewer-meta">
+                <h4>${escapeHtml(name)}</h4>
+                <div class="date">${dateStr}</div>
+              </div>
             </div>
+            <div class="review-stars">${starsHtml}</div>
           </div>
-          <div class="review-stars">${starsHtml}</div>
-          <div class="review-msg">${f.message ? escapeHtml(f.message) : '<em style="color:var(--text-muted);">No comment provided.</em>'}</div>
+          <div class="review-body">
+            ${f.message ? escapeHtml(f.message) : '<em style="color:var(--text-muted);">No comment provided.</em>'}
+          </div>
         `;
         container.appendChild(card);
       });
     } catch (err) {
       console.error("Error loading feedbacks:", err);
       container.innerHTML = `
-        <div class="empty-state">
+        <div class="feedbacks-empty">
           <i class="fa-solid fa-triangle-exclamation"></i>
           <p>Could not load reviews. Please try again later.</p>
         </div>`;
